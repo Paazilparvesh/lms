@@ -829,7 +829,13 @@ const Chatbot = ({ isOpen, onClose }) => {
 
   useEffect(() => {
     const saved = localStorage.getItem("edumaster_chat");
-    if (saved) setMessages(JSON.parse(saved));
+    if (saved) {
+      const parsed = JSON.parse(saved).map(msg => ({
+        ...msg,
+        timestamp: new Date(msg.timestamp) // ✅ Convert back here too
+      }));
+      setMessages(parsed);
+    }
   }, []);
 
   useEffect(() => {
@@ -1041,8 +1047,12 @@ Assistant:
     onClose();
   };
 
-  const formatTime = (d) =>
-    d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const formatTime = (d) => {
+    const dateObj = d instanceof Date ? d : new Date(d);
+    if (isNaN(dateObj)) return ""; // fallback in case of invalid date
+    return dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  };
+
 
   return (
     <AnimatePresence>
