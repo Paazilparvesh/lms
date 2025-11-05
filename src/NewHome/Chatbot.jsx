@@ -651,7 +651,7 @@ const Chatbot = ({ isOpen, onClose }) => {
           animate={{ opacity: 1, y: 0, scale: 1, height: isMinimized ? 60 : 660 }}
           exit={{ opacity: 0, y: 20, scale: 0.95 }}
           transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-          className={`fixed bottom-28 right-4 w-[90vw] max-w-[420px] flex flex-col bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50 ${isMinimized ? 'cursor-pointer' : ''}`}
+          className={`fixed bottom-5 right-28 w-[90vw] max-w-[350px] max-h-[80vh] flex flex-col bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50 ${isMinimized ? 'cursor-pointer' : ''}`}
           onClick={isMinimized ? toggleMinimize : undefined}
         >
           {/* Header */}
