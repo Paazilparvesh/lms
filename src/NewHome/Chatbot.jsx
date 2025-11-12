@@ -780,12 +780,19 @@
 
 
 
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence, useAnimation } from 'framer-motion';
 import { FiSend, FiX, FiChevronUp, FiThumbsUp } from 'react-icons/fi';
 import { RiRobot2Line } from 'react-icons/ri';
 import axios from 'axios';
 import ReactMarkdown from "react-markdown";
+
+// Chatbot.jsx
+import {
+  buildConversationContext,
+  formatTime,
+  fetchLMSData
+} from "/src/Utils/ChatUtil.js";
 
 // ✅ Use environment variable for security
 const GEMINI_API_URL =
@@ -811,20 +818,23 @@ const Chatbot = ({ isOpen, onClose }) => {
   const hasGreeted = useRef(false);
   const controls = useAnimation();
 
-  const greetings = [
-    "Hello! I'm your EduMaster assistant. Ask me about any course!",
-    "Hi! Need info on Python, ML, Cyber Security, or more?",
-    "Welcome! I can guide you on courses and more.",
-  ];
+
 
 
   useEffect(() => {
+
+    const greetings = [
+      "Hello! I'm your EduMaster assistant. Ask me about any course!",
+      "Hi! Need info on Python, ML, Cyber Security, or more?",
+      "Welcome! I can guide you on courses and more.",
+    ];
+
     if (isOpen && !hasGreeted.current) {
       const greet = greetings[Math.floor(Math.random() * greetings.length)];
       setMessages([{ type: 'bot', text: greet, timestamp: new Date(), reacted: false }]);
       hasGreeted.current = true; // ✅ Prevent future greetings
     }
-  }, [isOpen,]);
+  }, [isOpen]);
 
 
   useEffect(() => {
@@ -853,56 +863,9 @@ const Chatbot = ({ isOpen, onClose }) => {
     );
   };
 
-
-  const buildConversationContext = (messages) => {
-    // Keep last 5 messages for context
-    const recentMessages = messages.slice(-5);
-
-    return recentMessages
-      .map(m => `${m.type === 'user' ? 'User' : 'Assistant'}: ${m.text}`)
-      .join('\n');
-  };
-
-
-
   const handleSend = async () => {
     const input = userInput.trim();
     if (!input) return;
-
-    const fetchLMSData = async (query) => {
-      try {
-        const username = import.meta.env.VITE_LMS_USER;
-        const password = import.meta.env.VITE_LMS_PASS;
-        const token = btoa(`${username}:${password}`);
-
-        // ✅ Fetch courses securely with Basic Auth
-        const coursesRes = await axios.get(`${import.meta.env.VITE_Course_name}`, {
-          headers: {
-            Authorization: `Basic ${token}`,
-          },
-        });
-
-        const courses = coursesRes.data || [];
-
-        if (!courses.length) return "No courses available right now.";
-
-        // ✅ Make a clean context summary
-        const context = courses
-          .slice(0, 10)
-          .map(
-            (c) =>
-              `• ${c.name || c.title} — ${c.description?.slice(0, 80) || "No description."}`
-          )
-          .join("\n");
-
-        return `Here are some available courses from EduMaster LMS:\n${context}`;
-      } catch (err) {
-        console.error("Error fetching LMS data:", err);
-        return "No course data available right now.";
-      }
-    };
-
-
 
     const userMessage = { type: 'user', text: input, timestamp: new Date() };
     setMessages(prev => [...prev, userMessage]);
@@ -1047,11 +1010,11 @@ Assistant:
     onClose();
   };
 
-  const formatTime = (d) => {
-    const dateObj = d instanceof Date ? d : new Date(d);
-    if (isNaN(dateObj)) return ""; // fallback in case of invalid date
-    return dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  };
+  // const formatTime = (d) => {
+  //   const dateObj = d instanceof Date ? d : new Date(d);
+  //   if (isNaN(dateObj)) return ""; // fallback in case of invalid date
+  //   return dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  // };
 
 
   return (
@@ -1189,6 +1152,8 @@ Assistant:
             </>
           )}
         </motion.div>
+        
+
       )}
     </AnimatePresence>
   );
