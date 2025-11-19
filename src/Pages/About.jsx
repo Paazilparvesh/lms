@@ -9,6 +9,8 @@ import ScopikAdvantages from "/src/Components/AboutComponents/Advantage";
 import Stats from "/src/Components/AboutComponents/Stats";
 import Policy from "/src/Components/AboutComponents/Policy";
 import ScopikCard from "../Components/AboutComponents/ScopikCard";
+import Chatbot from "../NewHome/Chatbot";
+import ChatbotWrapper from "./ChatbotWrapper";  
 
 function About() {
   return (
@@ -21,7 +23,8 @@ function About() {
       
       <Stats />
       {/* <ScopikAdvantages /> */}
-    
+    <Chatbot />
+    <ChatbotWrapper />
     </>
   );
 };
