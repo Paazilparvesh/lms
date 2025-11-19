@@ -233,203 +233,203 @@ export default function Quizzes({
     allChaptersCompleted &&
     chapterMarkedComplete;
 
-  return (
-    <>
-      <div className="p-4 sm:p-6 max-w-4xl mx-auto bg-white dark:bg-black rounded-lg shadow border border-zinc-700 text-white overflow-y-auto max-h-[calc(100vh-100px)]">
-        <h2 className="text-2xl font-bold mb-6 text-orange-500">
-          Quiz for Chapter: {chapterTitle || `#${chapterId}`}
-        </h2>
+  // return (
+  //   <>
+  //     <div className="p-4 sm:p-6 max-w-4xl mx-auto bg-white dark:bg-black rounded-lg shadow border border-zinc-700 text-white overflow-y-auto max-h-[calc(100vh-100px)]">
+  //       <h2 className="text-2xl font-bold mb-6 text-orange-500">
+  //         Quiz for Chapter: {chapterTitle || `#${chapterId}`}
+  //       </h2>
 
-        {quizzes.length === 0 ? (
-          <p className="text-gray-400">Loading or no quizzes available...</p>
-        ) : showReviewInstead ? (
-          <div className="p-6 rounded-lg border border-orange-500 bg-white dark:bg-black text-white shadow-lg">
-            <p className="text-xl font-semibold mb-4 text-orange-400">
-              You got {score} out of {quizzes.length} correct.
-            </p>
+  //       {quizzes.length === 0 ? (
+  //         <p className="text-gray-400">Loading or no quizzes available...</p>
+  //       ) : showReviewInstead ? (
+  //         <div className="p-6 rounded-lg border border-orange-500 bg-white dark:bg-black text-white shadow-lg">
+  //           <p className="text-xl font-semibold mb-4 text-orange-400">
+  //             You got {score} out of {quizzes.length} correct.
+  //           </p>
 
-            {!certificateDownloaded && (
-              <>
-                <label className="block mb-2 font-medium text-sm text-orange-300">
-                  Leave a quick review before claiming your certificate:
-                </label>
-                <textarea
-                  rows="3"
-                  placeholder="Your feedback..."
-                  className="w-full p-3 rounded bg-white dark:bg-black text-black dark:text-white border border-orange-500"
-                  value={review}
-                  onChange={(e) => setReview(e.target.value)}
-                ></textarea>
-              </>
-            )}
+  //           {!certificateDownloaded && (
+  //             <>
+  //               <label className="block mb-2 font-medium text-sm text-orange-300">
+  //                 Leave a quick review before claiming your certificate:
+  //               </label>
+  //               <textarea
+  //                 rows="3"
+  //                 placeholder="Your feedback..."
+  //                 className="w-full p-3 rounded bg-white dark:bg-black text-black dark:text-white border border-orange-500"
+  //                 value={review}
+  //                 onChange={(e) => setReview(e.target.value)}
+  //               ></textarea>
+  //             </>
+  //           )}
 
-            <button
-              onClick={handleCertificateRedirect}
-              className={`mt-4 px-4 py-2 rounded text-white transition ${
-                certificateDownloaded
-                  ? "bg-green-600 hover:bg-green-700"
-                  : "bg-orange-500 hover:bg-orange-600"
-              }`}
-            >
-              {certificateDownloaded
-                ? "View Certificate"
-                : "Download Certificate"}
-            </button>
-          </div>
-        ) : (
-          <>
-            {quizzes[currentIndex] && (
-              <div className="mb-6 p-4 rounded-lg border border-zinc-700 bg-white dark:bg-black">
-                <p className="font-semibold text-lg text-black dark:text-white mb-4">
-                  {currentIndex + 1}. {quizzes[currentIndex].question_text}
-                </p>
-                {[1, 2, 3, 4].map((opt) => (
-                  <label
-                    key={opt}
-                    className="block mb-2 cursor-pointer text-black dark:text-white hover:text-orange-400"
-                  >
-                    <input
-                      type="radio"
-                      name={`quiz-${currentIndex}`}
-                      value={opt}
-                      checked={
-                        String(userAnswers[currentIndex]) === String(opt)
-                      }
-                      onChange={() => handleAnswer(currentIndex, opt)}
-                      className="mr-2 accent-orange-500"
-                    />
-                    {quizzes[currentIndex][`option${opt}`]}
-                  </label>
-                ))}
-              </div>
-            )}
+  //           <button
+  //             onClick={handleCertificateRedirect}
+  //             className={`mt-4 px-4 py-2 rounded text-white transition ${
+  //               certificateDownloaded
+  //                 ? "bg-green-600 hover:bg-green-700"
+  //                 : "bg-orange-500 hover:bg-orange-600"
+  //             }`}
+  //           >
+  //             {certificateDownloaded
+  //               ? "View Certificate"
+  //               : "Download Certificate"}
+  //           </button>
+  //         </div>
+  //       ) : (
+  //         <>
+  //           {quizzes[currentIndex] && (
+  //             <div className="mb-6 p-4 rounded-lg border border-zinc-700 bg-white dark:bg-black">
+  //               <p className="font-semibold text-lg text-black dark:text-white mb-4">
+  //                 {currentIndex + 1}. {quizzes[currentIndex].question_text}
+  //               </p>
+  //               {[1, 2, 3, 4].map((opt) => (
+  //                 <label
+  //                   key={opt}
+  //                   className="block mb-2 cursor-pointer text-black dark:text-white hover:text-orange-400"
+  //                 >
+  //                   <input
+  //                     type="radio"
+  //                     name={`quiz-${currentIndex}`}
+  //                     value={opt}
+  //                     checked={
+  //                       String(userAnswers[currentIndex]) === String(opt)
+  //                     }
+  //                     onChange={() => handleAnswer(currentIndex, opt)}
+  //                     className="mr-2 accent-orange-500"
+  //                   />
+  //                   {quizzes[currentIndex][`option${opt}`]}
+  //                 </label>
+  //               ))}
+  //             </div>
+  //           )}
 
-            <div className="flex flex-wrap justify-between items-center gap-2 mt-4">
-              <button
-                onClick={() => setCurrentIndex((i) => Math.max(0, i - 1))}
-                disabled={currentIndex === 0 || showResult}
-                className="px-4 py-2 rounded bg-zinc-700 hover:bg-zinc-600 text-white disabled:opacity-40"
-              >
-                Previous
-              </button>
+  //           <div className="flex flex-wrap justify-between items-center gap-2 mt-4">
+  //             <button
+  //               onClick={() => setCurrentIndex((i) => Math.max(0, i - 1))}
+  //               disabled={currentIndex === 0 || showResult}
+  //               className="px-4 py-2 rounded bg-zinc-700 hover:bg-zinc-600 text-white disabled:opacity-40"
+  //             >
+  //               Previous
+  //             </button>
 
-              {!showResult && currentIndex < quizzes.length - 1 && (
-                <button
-                  onClick={() =>
-                    setCurrentIndex((i) => Math.min(quizzes.length - 1, i + 1))
-                  }
-                  className="px-4 py-2 rounded bg-orange-500 hover:bg-orange-600 text-white"
-                >
-                  Next
-                </button>
-              )}
-            </div>
+  //             {!showResult && currentIndex < quizzes.length - 1 && (
+  //               <button
+  //                 onClick={() =>
+  //                   setCurrentIndex((i) => Math.min(quizzes.length - 1, i + 1))
+  //                 }
+  //                 className="px-4 py-2 rounded bg-orange-500 hover:bg-orange-600 text-white"
+  //               >
+  //                 Next
+  //               </button>
+  //             )}
+  //           </div>
 
-            {!showResult && currentIndex === quizzes.length - 1 && (
-              <button
-                onClick={handleSubmit}
-                className="mt-6 px-6 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded"
-              >
-                Submit Quiz
-              </button>
-            )}
+  //           {!showResult && currentIndex === quizzes.length - 1 && (
+  //             <button
+  //               onClick={handleSubmit}
+  //               className="mt-6 px-6 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded"
+  //             >
+  //               Submit Quiz
+  //             </button>
+  //           )}
 
-            {showResult && (
-              <div className="mt-8 p-6 rounded-lg border border-orange-500 bg-white dark:bg-black text-white shadow-lg">
-                <p className="text-xl font-semibold mb-4 text-orange-400">
-                  You got {score} out of {quizzes.length} correct.
-                </p>
+  //           {showResult && (
+  //             <div className="mt-8 p-6 rounded-lg border border-orange-500 bg-white dark:bg-black text-white shadow-lg">
+  //               <p className="text-xl font-semibold mb-4 text-orange-400">
+  //                 You got {score} out of {quizzes.length} correct.
+  //               </p>
 
-                <div className="flex flex-wrap gap-3">
-                  {needsRestart && (
-                    <button
-                      onClick={handleRestart}
-                      className="px-4 py-2 rounded bg-orange-500 text-white hover:bg-orange-600"
-                    >
-                      Restart Quiz
-                    </button>
-                  )}
+  //               <div className="flex flex-wrap gap-3">
+  //                 {needsRestart && (
+  //                   <button
+  //                     onClick={handleRestart}
+  //                     className="px-4 py-2 rounded bg-orange-500 text-white hover:bg-orange-600"
+  //                   >
+  //                     Restart Quiz
+  //                   </button>
+  //                 )}
 
-                  {score >= quizzes.length - 1 &&
-                    isLastChapter &&
-                    allChaptersCompleted &&
-                    chapterMarkedComplete && (
-                      <button
-                        onClick={handleCertificateRedirect}
-                        className="px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700"
-                      >
-                        View Certificate
-                      </button>
-                    )}
+  //                 {score >= quizzes.length - 1 &&
+  //                   isLastChapter &&
+  //                   allChaptersCompleted &&
+  //                   chapterMarkedComplete && (
+  //                     <button
+  //                       onClick={handleCertificateRedirect}
+  //                       className="px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700"
+  //                     >
+  //                       View Certificate
+  //                     </button>
+  //                   )}
 
-                  {score >= quizzes.length - 1 &&
-                    isLastChapter &&
-                    allChaptersCompleted &&
-                    !chapterMarkedComplete && (
-                      <button
-                        onClick={handlecomplete}
-                        className="px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700"
-                      >
-                        Complete
-                      </button>
-                    )}
+  //                 {score >= quizzes.length - 1 &&
+  //                   isLastChapter &&
+  //                   allChaptersCompleted &&
+  //                   !chapterMarkedComplete && (
+  //                     <button
+  //                       onClick={handlecomplete}
+  //                       className="px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700"
+  //                     >
+  //                       Complete
+  //                     </button>
+  //                   )}
 
-                  {score >= quizzes.length - 1 && !isLastChapter && (
-                    <button
-                      onClick={handleNextChapter}
-                      className="px-4 py-2 rounded bg-orange-500 text-white hover:bg-orange-600"
-                    >
-                      Unlock Next Chapter
-                    </button>
-                  )}
-                </div>
-              </div>
-            )}
-          </>
-        )}
+  //                 {score >= quizzes.length - 1 && !isLastChapter && (
+  //                   <button
+  //                     onClick={handleNextChapter}
+  //                     className="px-4 py-2 rounded bg-orange-500 text-white hover:bg-orange-600"
+  //                   >
+  //                     Unlock Next Chapter
+  //                   </button>
+  //                 )}
+  //               </div>
+  //             </div>
+  //           )}
+  //         </>
+  //       )}
 
-        {showCompletionModal && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-sm w-full text-center">
-              <h3 className="text-lg font-semibold mb-4 text-green-600">
-                🎉 Congratulations!
-              </h3>
-              <p className="mb-4 text-gray-700 dark:text-gray-300">
-                Your course has been marked as complete.
-              </p>
-              <button
-                onClick={() => setShowCompletionModal(false)}
-                className="mt-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded"
-              >
-                OK
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
+  //       {showCompletionModal && (
+  //         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+  //           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-sm w-full text-center">
+  //             <h3 className="text-lg font-semibold mb-4 text-green-600">
+  //               🎉 Congratulations!
+  //             </h3>
+  //             <p className="mb-4 text-gray-700 dark:text-gray-300">
+  //               Your course has been marked as complete.
+  //             </p>
+  //             <button
+  //               onClick={() => setShowCompletionModal(false)}
+  //               className="mt-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded"
+  //             >
+  //               OK
+  //             </button>
+  //           </div>
+  //         </div>
+  //       )}
+  //     </div>
 
-      {showAlreadyCertificateModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-sm w-full text-center">
-            <h3 className="text-lg font-semibold mb-4 text-yellow-500">
-              🎓 Certificate Already Downloaded!
-            </h3>
-            <p className="mb-4 text-gray-700 dark:text-gray-300">
-              You've already claimed your certificate for{" "}
-              <strong>{courseName}</strong>.
-            </p>
-            <button
-              onClick={() => {
-                setShowAlreadyCertificateModal(false);
-                navigate("/certificate");
-              }}
-              className="mt-2 px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded"
-            >
-              View Certificate
-            </button>
-          </div>
-        </div>
-      )}
-    </>
-  );
+  //     {showAlreadyCertificateModal && (
+  //       <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+  //         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-sm w-full text-center">
+  //           <h3 className="text-lg font-semibold mb-4 text-yellow-500">
+  //             🎓 Certificate Already Downloaded!
+  //           </h3>
+  //           <p className="mb-4 text-gray-700 dark:text-gray-300">
+  //             You've already claimed your certificate for{" "}
+  //             <strong>{courseName}</strong>.
+  //           </p>
+  //           <button
+  //             onClick={() => {
+  //               setShowAlreadyCertificateModal(false);
+  //               navigate("/certificate");
+  //             }}
+  //             className="mt-2 px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded"
+  //           >
+  //             View Certificate
+  //           </button>
+  //         </div>
+  //       </div>
+  //     )}
+  //   </>
+  // );
 }
