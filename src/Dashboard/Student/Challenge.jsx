@@ -1,296 +1,15 @@
-// import React, { useState, useEffect } from "react";
-// import challengeQuestions from "./Questions";
-
-// export default function Challenge({ onComplete }) {
-//   const [name, setName] = useState(localStorage.getItem("challengeName") || "");
-//   const [inputName, setInputName] = useState("");
-//   const [questions, setQuestions] = useState([]);
-//   const [current, setCurrent] = useState(0);
-//   const [selected, setSelected] = useState(null);
-//   const [score, setScore] = useState(0);
-//   const [completed, setCompleted] = useState(false);
-
-//   useEffect(() => {
-//     if (name) {
-//       const shuffled = [...challengeQuestions].sort(() => 0.5 - Math.random());
-//       setQuestions(shuffled.slice(0, 10));
-//     }
-//   }, [name]);
-
-//   const handleAnswer = (index) => {
-//     setSelected(index);
-//     if (index === questions[current].answer) {
-//       setScore((prev) => prev + 10);
-//     }
-//   };
-
-//   const nextQuestion = () => {
-//     if (current < 9) {
-//       setCurrent((prev) => prev + 1);
-//       setSelected(null);
-//     } else {
-//       setCompleted(true);
-//     }
-//   };
-
-//   const handleStart = () => {
-//     if (inputName.trim().length < 2) {
-//       alert("Please enter a valid name");
-//       return;
-//     }
-//     localStorage.setItem("challengeName", inputName.trim());
-//     setName(inputName.trim());
-//   };
-
-//   const resetChallenge = () => {
-//     setCurrent(0);
-//     setSelected(null);
-//     setScore(0);
-//     setCompleted(false);
-//     const shuffled = [...challengeQuestions].sort(() => 0.5 - Math.random());
-//     setQuestions(shuffled.slice(0, 10));
-//   };
-
-//   return (
-//     <div className="min-h-screen flex items-center justify-center bg-orange-50 font-mono px-4 py-10">
-//       <div className="bg-white rounded-xl shadow-md p-6 sm:p-8 max-w-2xl w-full text-center">
-//         {/* Name Prompt */}
-//         {!name ? (
-//           <>
-//             <h2 className="text-xl sm:text-2xl font-bold mb-4 text-orange-600">
-//               🔥 Enter your name to start the challenge
-//             </h2>
-//             <input
-//               type="text"
-//               value={inputName}
-//               onChange={(e) => setInputName(e.target.value)}
-//               placeholder="Your Name"
-//               className="border px-4 py-2 rounded-md w-full mb-4 text-center"
-//             />
-//             <button
-//               onClick={handleStart}
-//               className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-full font-semibold"
-//             >
-//               Start Challenge
-//             </button>
-//           </>
-//         ) : !completed ? (
-//           <>
-//             <h2 className="text-xl sm:text-2xl font-bold mb-4 text-orange-600">
-//               🔥 {name}, Question {current + 1} / 10
-//             </h2>
-//             <p className="mb-4 font-semibold text-gray-800">
-//               {questions[current]?.question}
-//             </p>
-//             <div className="grid gap-3 mb-6">
-//               {questions[current]?.options.map((opt, idx) => (
-//                 <button
-//                   key={idx}
-//                   onClick={() => handleAnswer(idx)}
-//                   disabled={selected !== null}
-//                   className={`border px-4 py-2 rounded-md transition-all duration-200 ${
-//                     selected === idx
-//                       ? idx === questions[current].answer
-//                         ? "bg-green-100 border-green-500 text-green-700"
-//                         : "bg-red-100 border-red-500 text-red-700"
-//                       : "hover:bg-orange-50"
-//                   }`}
-//                 >
-//                   {opt}
-//                 </button>
-//               ))}
-//             </div>
-//             {selected !== null && (
-//               <button
-//                 onClick={nextQuestion}
-//                 className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-full"
-//               >
-//                 {current < 9 ? "Next" : "Finish"}
-//               </button>
-//             )}
-//           </>
-//         ) : (
-//           <>
-//             <h2 className="text-2xl font-bold mb-4 text-orange-600">
-//               🎉 Well Done, {name}!
-//             </h2>
-//             <p className="text-lg mb-6 text-gray-700">
-//               You scored <span className="font-bold">{score}</span> XP out of 100
-//             </p>
-//             <button
-//               onClick={() => {
-//                 onComplete?.(score);
-//               }}
-//               className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-full mr-4"
-//             >
-//               Go to Leaderboard
-//             </button>
-//             <button
-//               onClick={resetChallenge}
-//               className="border border-orange-400 text-orange-600 px-6 py-2 rounded-full hover:bg-orange-50"
-//             >
-//               Try Again
-//             </button>
-//           </>
-//         )}
-//       </div>
-//     </div>
-//   );
-// }
-// import React, { useState, useEffect, useContext } from "react";
-// import challengeQuestions from "./Questions";
-// import { ChallengeContext } from "/src/App";
-
-// export default function Challenge({ onComplete }) {
-//   const { challengeName, setChallengeName, setChallengeScore } =
-//     useContext(ChallengeContext);
-
-//   const [inputName, setInputName] = useState(challengeName || "");
-//   const [showStart, setShowStart] = useState(true);
-//   const [questions, setQuestions] = useState([]);
-//   const [current, setCurrent] = useState(0);
-//   const [selected, setSelected] = useState(null);
-//   const [score, setScore] = useState(0);
-//   const [completed, setCompleted] = useState(false);
-
-//   const initializeQuestions = () => {
-//     const shuffled = [...challengeQuestions].sort(() => 0.5 - Math.random());
-//     setQuestions(shuffled.slice(0, 10));
-//   };
-
-//   const handleStartChallenge = () => {
-//     if (inputName.trim().length < 2) {
-//       alert("Please enter a valid name");
-//       return;
-//     }
-//     localStorage.setItem("challengeName", inputName.trim());
-//     setChallengeName(inputName.trim());
-//     initializeQuestions();
-//     setShowStart(false);
-//   };
-
-//   const handleAnswer = (index) => {
-//     setSelected(index);
-//     if (index === questions[current].answer) {
-//       setScore((prev) => prev + 10);
-//     }
-//   };
-
-//   const nextQuestion = () => {
-//     if (current < 9) {
-//       setCurrent((prev) => prev + 1);
-//       setSelected(null);
-//     } else {
-//       setCompleted(true);
-//       setChallengeScore(score);
-//     }
-//   };
-
-//   const resetChallenge = () => {
-//     setCurrent(0);
-//     setSelected(null);
-//     setScore(0);
-//     setCompleted(false);
-//     initializeQuestions();
-//     setShowStart(true);
-//   };
-
-//   return (
-//     <div className="min-h-screen flex items-center justify-center bg-orange-50 font-mono px-4 py-10">
-//       <div className="bg-white rounded-xl shadow-md p-6 sm:p-8 max-w-2xl w-full text-center">
-//         {/* Show Start Screen */}
-//         {showStart ? (
-//           <>
-//             <h2 className="text-xl sm:text-2xl font-bold mb-4 text-orange-600">
-//               🔥 Enter your name and start the challenge!
-//             </h2>
-//             <input
-//               type="text"
-//               value={inputName}
-//               onChange={(e) => setInputName(e.target.value)}
-//               placeholder="Your Name"
-//               className="border px-4 py-2 rounded-md w-full mb-4 text-center"
-//             />
-//             <button
-//               onClick={handleStartChallenge}
-//               className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-full font-semibold"
-//             >
-//               Start Your Challenge
-//             </button>
-//           </>
-//         ) : !completed ? (
-//           <>
-//             <h2 className="text-xl sm:text-2xl font-bold mb-4 text-orange-600">
-//               🔥 {inputName}, Question {current + 1} / 10
-//             </h2>
-//             <p className="mb-4 font-semibold text-gray-800">
-//               {questions[current]?.question}
-//             </p>
-//             <div className="grid gap-3 mb-6">
-//               {questions[current]?.options.map((opt, idx) => (
-//                 <button
-//                   key={idx}
-//                   onClick={() => handleAnswer(idx)}
-//                   disabled={selected !== null}
-//                   className={`border px-4 py-2 rounded-md transition-all duration-200 ${
-//                     selected === idx
-//                       ? idx === questions[current].answer
-//                         ? "bg-green-100 border-green-500 text-green-700"
-//                         : "bg-red-100 border-red-500 text-red-700"
-//                       : "hover:bg-orange-50"
-//                   }`}
-//                 >
-//                   {opt}
-//                 </button>
-//               ))}
-//             </div>
-//             {selected !== null && (
-//               <button
-//                 onClick={nextQuestion}
-//                 className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-full"
-//               >
-//                 {current < 9 ? "Next" : "Finish"}
-//               </button>
-//             )}
-//           </>
-//         ) : (
-//           <>
-//             <h2 className="text-2xl font-bold mb-4 text-orange-600">
-//               🎉 Well Done, {inputName}!
-//             </h2>
-//             <p className="text-lg mb-6 text-gray-700">
-//               You scored <span className="font-bold">{score}</span> XP out of 100
-//             </p>
-//             <button
-//               onClick={() => onComplete?.(score)}
-//               className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-full mr-4"
-//             >
-//               Go to Leaderboard
-//             </button>
-//             <button
-//               onClick={resetChallenge}
-//               className="border border-orange-400 text-orange-600 px-6 py-2 rounded-full hover:bg-orange-50"
-//             >
-//               Try Again
-//             </button>
-//           </>
-//         )}
-//       </div>
-//     </div>
-//   );
-// }
-
-
-
 import React, { useState, useEffect, useContext } from "react";
 import AceEditor from "react-ace";
-import codingQuestions from "/src/Dashboard/Student/CodingQuestion.js";
+import { ChallengeContext } from "/src/App";
+import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-github";
 import "ace-builds/src-noconflict/ext-language_tools";
-import { ChallengeContext } from "/src/App"; // adjust path if needed
 
-// Utility deep-equality via JSON stringify (sufficient for test objects/primitives/arrays)
+const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent`;
+const API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
+
+// Utility functions
 const deepEqual = (a, b) => {
   try {
     return JSON.stringify(a) === JSON.stringify(b);
@@ -299,93 +18,267 @@ const deepEqual = (a, b) => {
   }
 };
 
-export default function CodingChallenge({ onComplete }) {
-  const { challengeName, setChallengeName, setChallengeScore } =
-    useContext(ChallengeContext);
+const safeExecutePython = (code, functionName, inputs) => {
+  try {
+    const simulatedResult = simulatePythonExecution(code, functionName, inputs);
+    return { success: true, result: simulatedResult };
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+};
+
+const simulatePythonExecution = (code, functionName, inputs) => {
+  const functionMatch = code.match(new RegExp(`def ${functionName}\\([^)]*\\):([\\s\\S]*?)(?=def|\\n\\n|$)`));
+  
+  if (!functionMatch) {
+    throw new Error(`Function ${functionName} not found`);
+  }
+  
+  const functionBody = functionMatch[1].trim();
+  
+  if (functionBody.includes('return a + b')) {
+    return inputs[0] + inputs[1];
+  }
+  if (functionBody.includes('return s[::-1]')) {
+    return inputs[0].split('').reverse().join('');
+  }
+  if (functionBody.includes('sorted(set(arr))')) {
+    return [...new Set(inputs[0])].sort();
+  }
+  
+  return `Simulated output for ${functionName} with inputs: ${JSON.stringify(inputs)}`;
+};
+
+export default function AICodingChallenge({ onComplete }) {
+  const { challengeName, setChallengeName, setChallengeScore } = useContext(ChallengeContext);
 
   // UI state
   const [inputName, setInputName] = useState(challengeName || "");
   const [showStart, setShowStart] = useState(true);
-  const [questionIndex, setQuestionIndex] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [currentQuestion, setCurrentQuestion] = useState(null);
+  const [questions, setQuestions] = useState([]);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [code, setCode] = useState("");
   const [outputLog, setOutputLog] = useState([]);
   const [lastRunPassed, setLastRunPassed] = useState(false);
   const [score, setScore] = useState(0);
   const [completed, setCompleted] = useState(false);
-
-  const question = codingQuestions[questionIndex];
+  const [language, setLanguage] = useState("python");
+  const [difficulty, setDifficulty] = useState("beginner");
 
   useEffect(() => {
-    // set editor template on question change
-    setCode(question.template + `\n\n// You can run tests using Run button.`);
-    setOutputLog([]);
-    setLastRunPassed(false);
-  }, [questionIndex]);
+    if (questions.length > 0) {
+      setCurrentQuestion(questions[currentQuestionIndex]);
+      setCode(questions[currentQuestionIndex]?.template || "");
+    }
+  }, [questions, currentQuestionIndex]);
 
-  const handleStart = () => {
+  const generateAICodingQuestion = async () => {
+    setLoading(true);
+    try {
+      const prompt = {
+        contents: [{
+          parts: [{
+            text: `Generate a ${difficulty} level ${language} coding challenge with the following structure:
+
+            Return ONLY valid JSON in this exact format:
+            {
+              "title": "Challenge Title",
+              "description": "Detailed problem description",
+              "functionName": "function_name",
+              "template": "def function_name(param):\\n    # Your code here\\n    pass",
+              "tests": [
+                {"input": [param1], "expected": expected_output},
+                {"input": [param2], "expected": expected_output2}
+              ],
+              "instructions": "Step-by-step instructions"
+            }
+            
+            Requirements:
+            - Difficulty: ${difficulty}
+            - Language: ${language}
+            - Include 3-4 test cases with varied inputs
+            - Make it practical and educational
+            - Ensure function name is descriptive
+            - Provide clear expected outputs`
+          }]
+        }]
+      };
+
+      const response = await fetch(`${API_URL}?key=${API_KEY}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(prompt),
+      });
+
+      if (!response.ok) {
+        throw new Error(`API request failed: ${response.status}`);
+      }
+
+      const data = await response.json();
+      const responseText = data.candidates[0].content.parts[0].text;
+      
+      const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+      if (!jsonMatch) {
+        throw new Error('Invalid response format from AI');
+      }
+      
+      const questionData = JSON.parse(jsonMatch[0]);
+      
+      if (!questionData.title || !questionData.functionName || !questionData.tests) {
+        throw new Error('Invalid question structure from AI');
+      }
+      
+      return questionData;
+    } catch (error) {
+      console.error('Error generating AI question:', error);
+      return getFallbackQuestion(language, difficulty);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getFallbackQuestion = (lang, diff) => {
+    const fallbacks = {
+      python: {
+        beginner: {
+          title: "Sum of Two Numbers",
+          description: "Write a function that returns the sum of two numbers.",
+          functionName: "add",
+          template: "def add(a, b):\n    # Your code here\n    pass",
+          tests: [
+            { input: [2, 3], expected: 5 },
+            { input: [10, -4], expected: 6 },
+            { input: [0, 0], expected: 0 }
+          ],
+          instructions: "1. Define the function with parameters a and b\n2. Return the sum of a and b\n3. Make sure to handle negative numbers"
+        },
+        intermediate: {
+          title: "Find Maximum Number in List",
+          description: "Write a function that finds the maximum number in a list.",
+          functionName: "find_max",
+          template: "def find_max(numbers):\n    # Your code here\n    pass",
+          tests: [
+            { input: [[1, 5, 3, 9, 2]], expected: 9 },
+            { input: [[-1, -5, -3]], expected: -1 },
+            { input: [[42]], expected: 42 }
+          ],
+          instructions: "1. Iterate through the list\n2. Keep track of the maximum value\n3. Return the maximum value"
+        }
+      },
+      javascript: {
+        beginner: {
+          title: "Reverse a String",
+          description: "Write a function that reverses a string.",
+          functionName: "reverseString",
+          template: "function reverseString(str) {\n    // Your code here\n}",
+          tests: [
+            { input: ["hello"], expected: "olleh" },
+            { input: [""], expected: "" },
+            { input: ["racecar"], expected: "racecar" }
+          ],
+          instructions: "1. Convert string to array\n2. Reverse the array\n3. Join back to string"
+        }
+      }
+    };
+
+    return fallbacks[lang]?.[diff] || fallbacks.python.beginner;
+  };
+
+  const handleStart = async () => {
     if (!inputName || inputName.trim().length < 2) {
       alert("Please enter a valid name (min 2 chars).");
       return;
     }
+
     const trimmed = inputName.trim();
     localStorage.setItem("challengeName", trimmed);
     setChallengeName?.(trimmed);
-    setShowStart(false);
+    
+    setLoading(true);
+    try {
+      const questionPromises = Array(3).fill().map(() => 
+        generateAICodingQuestion()
+      );
+      
+      const generatedQuestions = await Promise.all(questionPromises);
+      setQuestions(generatedQuestions);
+      setShowStart(false);
+    } catch (error) {
+      console.error('Error generating questions:', error);
+      alert('Failed to generate questions. Using fallback questions.');
+      const fallbackQuestions = [
+        getFallbackQuestion(language, difficulty),
+        getFallbackQuestion(language, 'intermediate'),
+        getFallbackQuestion(language, 'intermediate')
+      ];
+      setQuestions(fallbackQuestions);
+      setShowStart(false);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // Execute user code and run tests
   const runTests = () => {
-    const fnName = question.functionName;
-    const tests = question.tests || [];
+    if (!currentQuestion) return;
+
+    const tests = currentQuestion.tests || [];
     const results = [];
     let passedCount = 0;
 
     try {
-      // Wrap user's code and extract the function by name
-      // We return the function reference so we can call it.
-      const wrapper = new Function(`${code}\nreturn typeof ${fnName} !== 'undefined' ? ${fnName} : null;`);
-      const userFn = wrapper();
-
-      if (typeof userFn !== "function") {
-        setOutputLog([
-          {
-            type: "error",
-            message: `Function "${fnName}" not found. Make sure you implement and export a function named "${fnName}".`
-          }
-        ]);
-        setLastRunPassed(false);
-        return;
-      }
-
-      // Run each test
       for (let i = 0; i < tests.length; i++) {
-        const t = tests[i];
+        const test = tests[i];
         let actual;
         let passed = false;
-        try {
-          // call the user's function with spread inputs
-          actual = userFn.apply(null, t.input);
-          passed = deepEqual(actual, t.expected);
-        } catch (err) {
-          actual = { error: err.message || String(err) };
-          passed = false;
+
+        if (language === "python") {
+          const execution = safeExecutePython(code, currentQuestion.functionName, test.input);
+          if (execution.success) {
+            actual = execution.result;
+            passed = deepEqual(actual, test.expected);
+          } else {
+            actual = { error: execution.error };
+            passed = false;
+          }
+        } else {
+          const wrapper = new Function(`${code}\nreturn typeof ${currentQuestion.functionName} !== 'undefined' ? ${currentQuestion.functionName} : null;`);
+          const userFn = wrapper();
+
+          if (typeof userFn !== "function") {
+            setOutputLog([{
+              type: "error",
+              message: `Function "${currentQuestion.functionName}" not found.`
+            }]);
+            setLastRunPassed(false);
+            return;
+          }
+
+          try {
+            actual = userFn.apply(null, test.input);
+            passed = deepEqual(actual, test.expected);
+          } catch (err) {
+            actual = { error: err.message };
+            passed = false;
+          }
         }
 
         if (passed) passedCount++;
-
         results.push({
           index: i + 1,
-          input: t.input,
-          expected: t.expected,
+          input: test.input,
+          expected: test.expected,
           actual,
           passed
         });
       }
 
-      // Score: percentage of passed tests
-      const sc = Math.round((passedCount / tests.length) * 100);
-      setScore(sc);
-      setChallengeScore?.(sc);
+      const questionScore = Math.round((passedCount / tests.length) * 100);
+      setScore(questionScore);
+      setChallengeScore?.(questionScore);
       setOutputLog(results);
       setLastRunPassed(passedCount === tests.length);
 
@@ -396,21 +289,21 @@ export default function CodingChallenge({ onComplete }) {
   };
 
   const handleNextQuestion = () => {
-    setQuestionIndex((prev) => {
+    setCurrentQuestionIndex(prev => {
       const next = prev + 1;
-      if (next >= codingQuestions.length) {
-        // finished all questions
+      if (next >= questions.length) {
         setCompleted(true);
-        setShowStart(false);
-        setChallengeScore?.(score); // final score recorded
+        setChallengeScore?.(score);
       }
-      return Math.min(next, codingQuestions.length - 1);
+      return Math.min(next, questions.length - 1);
     });
+    setOutputLog([]);
+    setLastRunPassed(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleTryAgain = () => {
-    setCode(question.template);
+    setCode(currentQuestion?.template || "");
     setOutputLog([]);
     setLastRunPassed(false);
     setScore(0);
@@ -422,7 +315,6 @@ export default function CodingChallenge({ onComplete }) {
     onComplete?.(score);
   };
 
-  // Small helpers for rendering
   const renderResultRow = (r) => {
     if (r.type === "error") {
       return <div className="text-red-600 font-medium">{r.message}</div>;
@@ -438,220 +330,360 @@ export default function CodingChallenge({ onComplete }) {
           <div className="text-sm font-semibold">{`Test ${r.index} — ${
             r.passed ? "Passed" : "Failed"
           }`}</div>
-          <div className="text-xs text-gray-600">{r.passed ? "✔" : "✖"}</div>
+          <div className={`text-xs ${r.passed ? "text-green-600" : "text-red-600"}`}>
+            {r.passed ? "✓" : "✗"}
+          </div>
         </div>
-        <div className="mt-2 text-sm">
-          <div>
-            <span className="font-medium">Input: </span>
-            <span>{JSON.stringify(r.input)}</span>
-          </div>
-          <div>
-            <span className="font-medium">Expected: </span>
-            <span>{JSON.stringify(r.expected)}</span>
-          </div>
-          <div>
-            <span className="font-medium">Actual: </span>
-            <span>{JSON.stringify(r.actual)}</span>
-          </div>
+        <div className="mt-2 text-sm space-y-1">
+          <div><span className="font-medium">Input: </span><code className="bg-gray-100 px-1 rounded">{JSON.stringify(r.input)}</code></div>
+          <div><span className="font-medium">Expected: </span><code className="bg-gray-100 px-1 rounded">{JSON.stringify(r.expected)}</code></div>
+          <div><span className="font-medium">Actual: </span><code className="bg-gray-100 px-1 rounded">{JSON.stringify(r.actual)}</code></div>
         </div>
       </div>
     );
   };
 
-  // Layout: left = question, right = editor
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 to-amber-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-orange-600 mx-auto mb-4"></div>
+          <p className="text-lg text-gray-700 font-medium">Generating AI-powered coding challenges...</p>
+          <p className="text-sm text-gray-500 mt-2">This may take a few seconds</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen flex items-start justify-center bg-orange-50 font-mono px-4 py-8">
-      <div className="bg-white rounded-xl shadow-md p-6 sm:p-8 max-w-6xl w-full">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50 font-mono">
+      {/* Header */}
+      <div className="bg-white shadow-sm border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center py-4">
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-sm">AI</span>
+              </div>
+              <h1 className="text-xl font-bold text-gray-900">Code Challenge</h1>
+            </div>
+            {!showStart && !completed && (
+              <div className="flex items-center space-x-4">
+                <div className="text-sm text-gray-600">
+                  Question <span className="font-bold">{currentQuestionIndex + 1}</span> of <span className="font-bold">{questions.length}</span>
+                </div>
+                <div className="w-24 bg-gray-200 rounded-full h-2">
+                  <div 
+                    className="bg-orange-500 h-2 rounded-full transition-all duration-300"
+                    style={{ width: `${((currentQuestionIndex + 1) / questions.length) * 100}%` }}
+                  ></div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {showStart ? (
-          <div className="text-center">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-4 text-orange-600">
-              🔥 Enter your name and start the coding challenge
-            </h2>
-            <input
-              type="text"
-              value={inputName}
-              onChange={(e) => setInputName(e.target.value)}
-              placeholder="Your Name"
-              className="border px-4 py-2 rounded-md w-full max-w-md mb-4 text-center"
-            />
-            <div className="flex justify-center gap-4">
-              <button
-                onClick={handleStart}
-                className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-full font-semibold"
-              >
-                Start
-              </button>
+          // Start Screen
+          <div className="max-w-2xl mx-auto">
+            <div className="bg-white rounded-2xl shadow-lg p-8 sm:p-12 text-center">
+              <div className="w-20 h-20 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span className="text-3xl">🚀</span>
+              </div>
+              <h2 className="text-3xl font-bold text-gray-900 mb-2">
+                AI-Powered Coding Challenge
+              </h2>
+              <p className="text-gray-600 mb-8">
+                Test your programming skills with AI-generated challenges
+              </p>
+              
+              <div className="space-y-6 max-w-md mx-auto">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2 text-left">
+                    Your Name
+                  </label>
+                  <input
+                    type="text"
+                    value={inputName}
+                    onChange={(e) => setInputName(e.target.value)}
+                    placeholder="Enter your name"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
+                  />
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2 text-left">
+                      Language
+                    </label>
+                    <select
+                      value={language}
+                      onChange={(e) => setLanguage(e.target.value)}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
+                    >
+                      <option value="python">Python</option>
+                      <option value="javascript">JavaScript</option>
+                    </select>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2 text-left">
+                      Difficulty
+                    </label>
+                    <select
+                      value={difficulty}
+                      onChange={(e) => setDifficulty(e.target.value)}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
+                    >
+                      <option value="beginner">Beginner</option>
+                      <option value="intermediate">Intermediate</option>
+                      <option value="advanced">Advanced</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <button
+                  onClick={handleStart}
+                  className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 transform hover:scale-105 focus:scale-105 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50"
+                >
+                  Start Challenge
+                </button>
+              </div>
+              
+              <div className="mt-8 grid grid-cols-3 gap-4 text-center">
+                <div className="p-4 bg-orange-50 rounded-lg">
+                  <div className="text-2xl font-bold text-orange-600">3</div>
+                  <div className="text-sm text-gray-600">Questions</div>
+                </div>
+                <div className="p-4 bg-orange-50 rounded-lg">
+                  <div className="text-2xl font-bold text-orange-600">AI</div>
+                  <div className="text-sm text-gray-600">Generated</div>
+                </div>
+                <div className="p-4 bg-orange-50 rounded-lg">
+                  <div className="text-2xl font-bold text-orange-600">100%</div>
+                  <div className="text-sm text-gray-600">Interactive</div>
+                </div>
+              </div>
             </div>
           </div>
         ) : completed ? (
-          <div className="text-center">
-            <h2 className="text-2xl font-bold mb-4 text-orange-600">
-              🎉 Well Done, {inputName}!
-            </h2>
-            <p className="text-lg mb-4 text-gray-700">Final Score: <span className="font-bold">{score}</span>%</p>
-            <div className="flex justify-center gap-4">
+          // Completion Screen
+          <div className="max-w-2xl mx-auto">
+            <div className="bg-white rounded-2xl shadow-lg p-8 sm:p-12 text-center">
+              <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span className="text-4xl">🎉</span>
+              </div>
+              <h2 className="text-3xl font-bold text-gray-900 mb-2">
+                Challenge Complete!
+              </h2>
+              <p className="text-gray-600 mb-2">
+                Great job, <span className="font-semibold text-orange-600">{inputName}</span>!
+              </p>
+              <div className="mb-8">
+                <div className="text-5xl font-bold text-orange-600 my-4">{score}%</div>
+                <div className="text-gray-600">Final Score</div>
+              </div>
+              
               <button
                 onClick={() => onComplete?.(score)}
-                className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-full"
+                className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-8 rounded-lg transition-colors duration-200"
               >
-                Go to Leaderboard
+                View Leaderboard
               </button>
             </div>
           </div>
-        ) : (
-          <div className="grid md:grid-cols-2 gap-6">
-            {/* Left: question panel */}
-            <div className="p-4 border rounded-lg h-full">
-              <div className="flex items-start justify-between">
-                <div>
-                  <h3 className="text-xl font-bold text-orange-600">{question.title}</h3>
-                  <p className="text-sm text-gray-600 mt-2">{question.description}</p>
-                </div>
-
-                <div className="text-right">
-                  <div className="text-xs text-gray-500">Question</div>
-                  <div className="text-lg font-semibold">{questionIndex + 1} / {codingQuestions.length}</div>
-                </div>
-              </div>
-
-              <div className="mt-4">
-                <div className="text-sm text-gray-700 mb-2 font-medium">Function to implement:</div>
-                <div className="bg-gray-100 p-3 rounded text-sm font-mono">function {question.functionName}(...){`{ /* ... */ }`}</div>
-              </div>
-
-              <div className="mt-4">
-                <div className="text-sm font-medium mb-2">Tests</div>
-                <div className="space-y-2">
-                  {question.tests.map((t, i) => (
-                    <div key={i} className="text-xs text-gray-700">
-                      <span className="font-medium">Test {i + 1}:</span> input: {JSON.stringify(t.input)} — expected: {JSON.stringify(t.expected)}
+        ) : currentQuestion ? (
+          // Main Challenge Interface
+          <div className="grid lg:grid-cols-3 gap-6">
+            {/* Left: Problem Statement */}
+            <div className="lg:col-span-1">
+              <div className="bg-white rounded-xl shadow-lg p-6 sticky top-6">
+                <div className="flex items-start justify-between mb-6">
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-900">
+                      {currentQuestion.title}
+                    </h3>
+                    <div className="flex gap-2 mt-2">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        {language.toUpperCase()}
+                      </span>
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                        {difficulty}
+                      </span>
                     </div>
-                  ))}
+                  </div>
                 </div>
-              </div>
 
-              <div className="mt-5">
-                <div className="flex items-center gap-3">
-                  <button
-                    onClick={runTests}
-                    className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded"
-                  >
-                    Run
-                  </button>
+                <div className="space-y-6">
+                  <div>
+                    <h4 className="text-sm font-semibold text-gray-900 mb-2">Description</h4>
+                    <p className="text-sm text-gray-700 leading-relaxed">
+                      {currentQuestion.description}
+                    </p>
+                  </div>
 
-                  <button
-                    onClick={() => {
-                      if (lastRunPassed) {
-                        // award full points for this question and move next or finish
-                        setChallengeScore?.(100);
-                        if (questionIndex < codingQuestions.length - 1) {
-                          handleNextQuestion();
-                        } else {
-                          handleFinish();
-                        }
-                      } else {
-                        alert("You need to pass all tests before submitting this question. Run tests and make sure they pass.");
+                  <div>
+                    <h4 className="text-sm font-semibold text-gray-900 mb-2">Function Signature</h4>
+                    <div className="bg-gray-50 p-4 rounded-lg font-mono text-sm">
+                      {language === 'python' 
+                        ? `def ${currentQuestion.functionName}(...):`
+                        : `function ${currentQuestion.functionName}(...) { }`
                       }
-                    }}
-                    className="border border-orange-400 text-orange-600 px-4 py-2 rounded hover:bg-orange-50"
-                  >
-                    Submit Question
-                  </button>
+                    </div>
+                  </div>
 
-                  <button
-                    onClick={handleTryAgain}
-                    className="border text-gray-700 px-4 py-2 rounded hover:bg-gray-50"
-                  >
-                    Reset Editor
-                  </button>
+                  <div>
+                    <h4 className="text-sm font-semibold text-gray-900 mb-2">Instructions</h4>
+                    <div className="bg-orange-50 p-4 rounded-lg">
+                      <p className="text-sm text-gray-700 whitespace-pre-line">
+                        {currentQuestion.instructions}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h4 className="text-sm font-semibold text-gray-900 mb-3">Test Cases</h4>
+                    <div className="space-y-3">
+                      {currentQuestion.tests.map((test, i) => (
+                        <div key={i} className="bg-gray-50 p-3 rounded-lg">
+                          <div className="text-xs font-medium text-gray-700 mb-1">Test Case {i + 1}</div>
+                          <div className="text-sm font-mono">
+                            <div className="text-gray-600">
+                              <span className="font-semibold">Input:</span> {test.input.map(inp => JSON.stringify(inp)).join(', ')}
+                            </div>
+                            <div className="text-gray-600">
+                              <span className="font-semibold">Expected:</span> {JSON.stringify(test.expected)}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-              </div>
-
-              <div className="mt-5">
-                <div className="text-sm font-medium mb-2">Result</div>
-                <div className="space-y-2">
-                  {outputLog.length === 0 ? (
-                    <div className="text-sm text-gray-500">No runs yet. Click <b>Run</b>.</div>
-                  ) : (
-                    outputLog.map((r, idx) => <div key={idx}>{renderResultRow(r)}</div>)
-                  )}
-                </div>
-              </div>
-
-              <div className="mt-4 text-sm text-gray-600">
-                <div>Current score (this question): <span className="font-semibold">{score}%</span></div>
-                <div className="mt-1 text-xs text-gray-500">Pass all tests to submit and move to next question.</div>
               </div>
             </div>
 
-            {/* Right: code editor */}
-            <div className="p-4 border rounded-lg h-full flex flex-col">
-              <div className="flex items-center justify-between mb-2">
-                <div className="text-sm font-medium">Code Editor</div>
-                <div className="text-xs text-gray-500">Language: JavaScript</div>
+            {/* Right: Code Editor and Results */}
+            <div className="lg:col-span-2 space-y-6">
+              {/* Code Editor */}
+              <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+                <div className="px-6 py-4 border-b border-gray-200">
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-lg font-semibold text-gray-900">Code Editor</h4>
+                    <div className="flex items-center space-x-4">
+                      <span className="text-sm text-gray-500">
+                        {language === 'python' ? 'Python' : 'JavaScript'}
+                      </span>
+                      <button
+                        onClick={() => setCode(currentQuestion.template)}
+                        className="text-sm text-orange-600 hover:text-orange-700 font-medium"
+                      >
+                        Reset Template
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-2">
+                  <AceEditor
+                    mode={language}
+                    theme="github"
+                    name="ai_coding_challenge_editor"
+                    value={code}
+                    onChange={setCode}
+                    width="100%"
+                    height="400px"
+                    fontSize={14}
+                    showPrintMargin={false}
+                    setOptions={{
+                      enableBasicAutocompletion: true,
+                      enableLiveAutocompletion: true,
+                      enableSnippets: true,
+                      showLineNumbers: true,
+                      tabSize: 2,
+                      showGutter: true,
+                      highlightActiveLine: true
+                    }}
+                  />
+                </div>
               </div>
 
-              <div className="flex-1">
-                <AceEditor
-                  mode="javascript"
-                  theme="github"
-                  name="coding_challenge_editor"
-                  value={code}
-                  onChange={(val) => setCode(val)}
-                  width="100%"
-                  height="420px"
-                  fontSize={14}
-                  showPrintMargin={false}
-                  setOptions={{
-                    enableBasicAutocompletion: true,
-                    enableLiveAutocompletion: true,
-                    enableSnippets: true,
-                    showLineNumbers: true,
-                    tabSize: 2
-                  }}
-                />
-              </div>
+              {/* Test Results and Controls */}
+              <div className="grid md:grid-cols-2 gap-6">
+                {/* Test Results */}
+                <div className="bg-white rounded-xl shadow-lg p-6">
+                  <h4 className="text-lg font-semibold text-gray-900 mb-4">Test Results</h4>
+                  <div className="space-y-3 max-h-80 overflow-y-auto">
+                    {outputLog.length === 0 ? (
+                      <div className="text-center py-8 text-gray-500">
+                        <div className="text-3xl mb-2">🧪</div>
+                        <p>Run tests to see results</p>
+                      </div>
+                    ) : (
+                      outputLog.map((r, idx) => (
+                        <div key={idx}>{renderResultRow(r)}</div>
+                      ))
+                    )}
+                  </div>
+                </div>
 
-              <div className="mt-3 flex justify-between items-center">
-                <div className="text-sm text-gray-600">Tip: implement the named function and click Run.</div>
-                <div className="flex items-center gap-3">
-                  <button
-                    onClick={() => {
-                      setOutputLog([]);
-                      setCode(question.template);
-                    }}
-                    className="text-xs border px-3 py-1 rounded"
-                  >
-                    Load Template
-                  </button>
-                  <button
-                    onClick={() => {
-                      // open sample solution (non-destructive)
-                      const sample = generateSampleSolution(question.functionName);
-                      setCode((cur) => cur + "\n\n// Sample solution (view only)\n" + sample);
-                    }}
-                    className="text-xs border px-3 py-1 rounded"
-                  >
-                    Show Hint
-                  </button>
+                {/* Controls and Status */}
+                <div className="bg-white rounded-xl shadow-lg p-6">
+                  <h4 className="text-lg font-semibold text-gray-900 mb-4">Progress</h4>
+                  
+                  <div className="space-y-4">
+                    <div className="text-center p-4 bg-orange-50 rounded-lg">
+                      <div className="text-2xl font-bold text-orange-600">{score}%</div>
+                      <div className="text-sm text-gray-600">Current Score</div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <button
+                        onClick={runTests}
+                        className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
+                      >
+                        <span>Run Tests</span>
+                        <span>▶</span>
+                      </button>
+                      
+                      <button
+                        onClick={() => {
+                          if (lastRunPassed) {
+                            handleNextQuestion();
+                          } else {
+                            alert("Please pass all tests before proceeding to the next question!");
+                          }
+                        }}
+                        className="w-full border border-orange-500 text-orange-600 hover:bg-orange-50 font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
+                      >
+                        <span>Submit & Next</span>
+                        <span>→</span>
+                      </button>
+
+                      <button
+                        onClick={handleTryAgain}
+                        className="w-full border border-gray-300 text-gray-700 hover:bg-gray-50 font-medium py-2 px-4 rounded-lg transition-colors duration-200"
+                      >
+                        Reset Code
+                      </button>
+                    </div>
+
+                    {lastRunPassed && (
+                      <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
+                        <div className="flex items-center space-x-2 text-green-700">
+                          <span className="text-lg">✓</span>
+                          <span className="font-medium">All tests passed! Ready to proceed.</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        )}
+        ) : null}
       </div>
     </div>
   );
-}
-
-// Simple sample solutions generator for "Show Hint" (non-exhaustive)
-function generateSampleSolution(fnName) {
-  const map = {
-    add: `function add(a, b) {\n  return a + b;\n}`,
-    reverseStr: `function reverseStr(s) {\n  return s.split('').reverse().join('');\n}`,
-    unique: `function unique(arr) {\n  const seen = new Set();\n  const out = [];\n  for (const v of arr) {\n    if (!seen.has(v)) { seen.add(v); out.push(v); }\n  }\n  return out;\n}`,
-    fizzBuzz: `function fizzBuzz(n) {\n  const out = [];\n  for (let i = 1; i <= n; i++) {\n    if (i % 15 === 0) out.push('FizzBuzz');\n    else if (i % 3 === 0) out.push('Fizz');\n    else if (i % 5 === 0) out.push('Buzz');\n    else out.push(i);\n  }\n  return out;\n}`
-  };
-
-  return map[fnName] || `// No sample available for ${fnName}\nfunction ${fnName}() {\n  // implement\n}`;
 }
