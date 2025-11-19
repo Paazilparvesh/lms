@@ -6,7 +6,7 @@ import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-github";
 import "ace-builds/src-noconflict/ext-language_tools";
 
-const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent`;
+const API_URL = import.meta.env.VITE_GEMINIAI_API_KEY;
 const API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
 
 // Utility functions

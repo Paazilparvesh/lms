@@ -74,7 +74,7 @@ const AIQuizGenerator = ({ chapterDescription, videoDescription, onQuizGenerated
       }
 
       // CORRECTED: Use the Gemini text generation endpoint
-      const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent`;
+const API_URL = import.meta.env.VITE_GEMINIAI_API_KEY;
 
       console.log("Sending request to Gemini API with description:", description.substring(0, 100) + "...");
 
